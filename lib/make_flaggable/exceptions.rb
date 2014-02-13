@@ -17,5 +17,17 @@ module MakeFlaggable
         super "Invalid flaggable."
       end
     end
+    
+    class InvalidFlagError < StandardError
+      def initialize
+        super "Invalid flag."
+      end
+    end
+    
+    class MissingFlagsError < StandardError
+      def initialize
+        super "Missing options :flags for make_flaggable"
+      end
+    end
   end
 end

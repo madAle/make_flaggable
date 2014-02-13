@@ -6,3 +6,4 @@ doc/*
 *.sqlite3
 gemfiles/*.lock
 .bundle
+.rvmrc

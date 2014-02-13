@@ -63,6 +63,12 @@ describe "Make Flaggable" do
         @flagger.flag(@flaggable, :inappropriate).should == nil
       end
 
+<<<<<<< HEAD
+      it "should only allow to flag a flaggable per flagger once without rasing an error" do
+        @flagger_once.flag(@flaggable)
+        lambda { @flagger_once.flag(@flaggable) }.should_not raise_error
+        MakeFlaggable::Flagging.count.should == 1
+=======
       it "should remove related flaggings when destroyed" do
         @flagger.flag!(@flaggable, :inappropriate)
         @flagger2.flag!(@flaggable, :inappropriate)
@@ -74,6 +80,7 @@ describe "Make Flaggable" do
 
         @flagger2.destroy
         @flaggable.flaggings.reload.should be_empty
+>>>>>>> 9819f5c75df76633bf365bcbbaf9716bd3f65c37
       end
     end
 
@@ -104,8 +111,13 @@ describe "Make Flaggable" do
 
       it "should not raise error if flagger not flagged the flaggable with normal method" do
         lambda {
+<<<<<<< HEAD
+          @flagger.unflag(@flaggable).should == false
+        }.should_not raise_error
+=======
           @flagger.unflag(@flaggable, :favorite).should == false
         }.should_not raise_error(MakeFlaggable::Exceptions::NotFlaggedError)
+>>>>>>> 9819f5c75df76633bf365bcbbaf9716bd3f65c37
       end
     end
 
@@ -152,6 +164,36 @@ describe "Make Flaggable" do
       end
     end
 
+<<<<<<< HEAD
+    describe '.flaggers' do
+      let(:other_flaggable) { FlaggableModel.create :name => "Flaggable 1" }
+
+      before { @flagger.flag @flaggable }
+
+      context 'No Argument passed' do
+        context 'Single flaggable resource' do
+          before  { @flagger_once.flag other_flaggable }
+          specify { FlaggerModel.flaggers.should == [@flagger] }
+        end
+
+        context 'Multiple flaggable resources' do
+          before { @flagger.flag other_flaggable }
+          it 'does not return duplicates' do
+            FlaggerModel.flaggers.should == [@flagger]
+          end
+        end
+      end
+
+      context 'Argument passed' do
+        it 'returns flaggers who have flagged a particular flaggable resource' do
+          FlaggerModel.flaggers(FlaggableModel).should == [@flagger] 
+        end
+
+        it 'returns nothing if no flag is found' do
+          @flagger.unflag @flaggable
+          FlaggerModel.flaggers(FlaggableModel).should be_blank
+        end
+=======
     describe "find_last_flag_for" do
       it "should fetch the most recent flag the flagger has made on the flaggable" do
         @flagger.flagged?(@flaggable, :favorite).should == false
@@ -182,6 +224,7 @@ describe "Make Flaggable" do
       it "should return an empty ActiveRecord relation when the flagger has made no flags on the flaggable" do
         @flagger.flagged?(@flaggable).should == false
         @flagger.find_all_flags_for(@flaggable).should == []
+>>>>>>> 9819f5c75df76633bf365bcbbaf9716bd3f65c37
       end
     end
   end

@@ -3,7 +3,7 @@ module MakeFlaggable
     extend ActiveSupport::Concern
 
     included do
-      has_many :flaggings, :class_name => "MakeFlaggable::Flagging", :as => :flaggable
+      has_many :flaggings, :class_name => "MakeFlaggable::Flagging", :as => :flaggable, :dependent => :destroy
     end
 
     module ClassMethods
@@ -12,12 +12,16 @@ module MakeFlaggable
       end
     end
 
-    def flagged?
-      flaggings.count > 0
+    def flagged?(flag = nil)
+      if flag.nil?
+        flaggings.count > 0
+      else
+        flaggings.where(:flag => flag.to_s).count > 0
+      end
     end
 
-    def flagged_by?(flagger)
-      flagger.flagged?(self)
+    def flagged_by?(flagger, flag)
+      flagger.flagged?(self, flag)
     end
   end
 end
